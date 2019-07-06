@@ -2,82 +2,77 @@ import 'package:flutter/material.dart';
 
 void main() => {
       runApp(MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Money Flow Management',
-        home: Scaffold(
-          appBar: AppBar(
-            title: Text('My Fist App'),
-          ),
-          body: getListView(),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              debugPrint('FAB Clicked');
-            },
-            child: Icon(Icons.add),
-            tooltip: "Add One more Item",
-          ),
-        ),
-      ))
+          debugShowCheckedModeBanner: false,
+          title: 'Money Flow Management',
+          home: MyFavoriteCity()))
     };
-// Widget getListView() {
-//   var listview = ListView(
-//     children: <Widget>[
-//       ListTile(
-//         leading: Icon(Icons.landscape),
-//         title: Text('First List Item'),
-//         subtitle: Text('Greate Subtitle'),
-//         trailing: Icon(Icons.wb_sunny),
-//         onTap: () {
-//           debugPrint('First Item Clicked');
-//         },
-//       ),
-//       ListTile(
-//         leading: Icon(Icons.landscape),
-//         title: Text('Second List Item'),
-//         subtitle: Text('Second Subtitle'),
-//         trailing: Icon(Icons.wb_sunny),
-//       ),
-//       ListTile(
-//         leading: Icon(Icons.landscape),
-//         title: Text('Third List Item'),
-//         subtitle: Text('Third Subtitle'),
-//         trailing: Icon(Icons.wb_sunny),
-//       )
-//     ],
-//   );
-//   return listview;
-// }
-List<String> getListElement() {
-  var items = List<String>.generate(100, (counter) => "Item $counter");
-  return items;
+
+class MyFavoriteCity extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _MyFavoriteCityState();
+  }
 }
 
-void showSnackBar(BuildContext context, String item) {
-  var snack = SnackBar(
-    content: Text(item),
-    action: SnackBarAction(
-      label: "UNDO",
-      onPressed: () {
-        debugPrint("Dummy UNDO Operation");
-      },
-    ),
-  );
-  Scaffold.of(context).showSnackBar(snack);
-}
-
-Widget getListView() {
-  var listItems = getListElement();
-  var listItem = ListView.builder(
-    itemBuilder: (context, index) {
-      return ListTile(
-        leading: Icon(Icons.arrow_right),
-        title: Text(listItems[index]),
-        onTap: () {
-          //debugPrint('${listItems[index]} was clicked');
-          showSnackBar(context, '${listItems[index]} was clicked');
-        },
-      );
-    },
-  );
-  return listItem;
+class _MyFavoriteCityState extends State<MyFavoriteCity> {
+  var cityName = '';
+  var _currencies = ["Rupees", "Dollar", "Pounds", "Others"];
+  var selectedCurrency = '';
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Stateful App Example'),
+      ),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(30.0),
+              child: TextField(
+                onChanged: (String userinput) {
+                  debugPrint("Function Called");
+                  setState(() {
+                    cityName = userinput;
+                  });
+                },
+              ),
+            ),
+            DropdownButton<String>(
+              items: _currencies.map((String dropdownStringItem) {
+                return DropdownMenuItem<String>(
+                  value: dropdownStringItem,
+                  child: Text(dropdownStringItem),
+                );
+              }).toList(),
+              onChanged: (String selectedItem) {
+                updateSelectedItem(selectedItem);
+              },
+            ),
+            Padding(
+              padding: EdgeInsets.all(30.0),
+              child: Text(
+                "Your best city is $cityName",
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(30.0),
+              child: Text(
+                "Selected Currency $selectedCurrency",
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  void updateSelectedItem (String selectedItem)
+  {
+    setState(() {
+                  this.selectedCurrency = selectedItem;
+                });
+  }
 }
